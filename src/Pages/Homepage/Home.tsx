@@ -1,36 +1,46 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import Hero from "../../Components/Hero-page/Hero"
 
 import './Home.scss'
 import Header from "../../Components/Header/Header"
-import {CircleFill, PlayCircleFill, ArrowRightCircleFill} from 'react-bootstrap-icons'
 
 const Home = () => {
+    var [ heroData, setHeroData ] = useState();
+
+    const options = {
+        method: 'GET',
+        headers: {
+            accept: 'application/json',
+            Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5MGUzOTBjZjJlYmZjMjNiM2M0ZjM2MzhhMWE3OWE4YyIsInN1YiI6IjY1NGI0ZmMyNjdiNjEzMDBhZmM4Y2Q3OCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.q7NL_TuimuDDSdkvmlPe1yjwsPuELwrydhGVbPbX-cM'
+        }
+    };
+
+    useEffect(() => {
+        const FetchHeroData = async () => {
+            var query = 'Spider-man: No Way Home';
+
+            try {
+                const response = await fetch(`https://api.themoviedb.org/3/search/movie?query=${query}&include_adult=false&language=en-US&page=1`, options);
+                const searchResults = await response.json();
+                const movieId = searchResults.results[0].id;
+                const movieResponse = await fetch(`https://api.themoviedb.org/3/movie/${movieId}`, options);
+                const data = await movieResponse.json();
+                
+                setHeroData(data);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        FetchHeroData();
+    }, []);
+
     return (
-    <>
-        <section className='landing'>
-            <Header/>
-            <div className='landing2'>
-                <img className='image1' src="/Images/No-way-home.png" alt="" />
-                <div className='landing3'>
-                    <p>Action</p>
-                    <CircleFill className='circle-icon'></CircleFill>
-                    <p>Adventure</p>
-                    <CircleFill className='circle-icon'></CircleFill>
-                    <p>2h 28min</p>
-                </div>
-                <p className='landing-text'>
-                    When a spell goes wrong, 
-                    dangerous foes from other worlds start to appear, 
-                    forcing Peter to discover what it truly means to be Spider-Man.
-                </p>
-                <div className='landing3'>
-                    <button className='watch'><PlayCircleFill></PlayCircleFill> Watch Now</button>
-                    <button className='info'><ArrowRightCircleFill></ArrowRightCircleFill> More Info</button>
-                </div>
-            </div>
-        </section>
-    </>
+        <>
+        <Header/>
+        
+        {heroData && <Hero data={heroData} />}
+        </>
     );
 }
-
-export default Home;
+export default Home
