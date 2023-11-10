@@ -6,6 +6,7 @@ import Header from "../../Components/Header/Header"
 
 const Home = () => {
     var [ heroData, setHeroData ] = useState();
+    var [trendingData, setTrendingData] = useState();
 
     const options = {
         method: 'GET',
@@ -32,14 +33,26 @@ const Home = () => {
             }
         }
 
+        const FetchMovieData = async () => {
+            try {
+                const response = await fetch('https://api.themoviedb.org/3/trending/movie/day?language=en-US', options);
+                const fresh = await response.json();
+                console.log(fresh);
+                setTrendingData(fresh);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
         FetchHeroData();
+        FetchMovieData();
     }, []);
 
     return (
         <>
         <Header/>
         
-        {heroData && <Hero data={heroData} />}
+        {heroData && trendingData &&  <Hero data={heroData} trending={trendingData}/>}
         </>
     );
 }
