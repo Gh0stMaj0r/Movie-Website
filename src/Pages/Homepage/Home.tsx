@@ -7,6 +7,8 @@ import Header from "../../Components/Header/Header"
 const Home = () => {
     var [ heroData, setHeroData ] = useState();
     var [trendingData, setTrendingData] = useState();
+    var [upcomingData, setUpcomingData] = useState();
+    var [nowplayingData, setNowplayingData] = useState();
 
     const options = {
         method: 'GET',
@@ -44,15 +46,39 @@ const Home = () => {
             }
         }
 
+        const FetchUpcomingMovieData = async () => {
+            try {
+                const response = await fetch('https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&primary_release_year=2024&primary_release_date.gte=10.02.2024&sort_by=popularity.desc', options);
+                const fresh = await response.json();
+                console.log(fresh);
+                setUpcomingData(fresh);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        const FetchNowplayingMovieData = async () => {
+            try {
+                const response = await fetch('https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1', options);
+                const fresh = await response.json();
+                console.log(fresh);
+                setNowplayingData(fresh);
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
         FetchHeroData();
         FetchMovieData();
+        FetchUpcomingMovieData();
+        FetchNowplayingMovieData();
     }, []);
 
     return (
         <>
         <Header/>
         
-        {heroData && trendingData &&  <Hero data={heroData} trending={trendingData}/>}
+        {heroData && trendingData && upcomingData && nowplayingData && <Hero data={heroData} trending={trendingData} upcoming={upcomingData} nowplaying={nowplayingData}/>}
         </>
     );
 }

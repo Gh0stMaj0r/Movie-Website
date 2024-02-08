@@ -77,6 +77,59 @@ const Hero = (data: any, trending: any) => {
             <div className="trending-movies">
             {data.trending.results.slice(0,5).map ((item: any, index: number) => (
                 <div className="movies">
+                    <img className="movie-image" src={`https://image.tmdb.org/t/p/w500/${item.poster_path}`} alt=""/>
+                    <div className="movie-overlay">
+                        <h3 className="movie-title">{item.title}</h3>
+                    <div className="hero-rating">
+                        <StarFill color="orange"></StarFill>
+                        <span>{item.vote_average.toFixed(1)}/10</span>
+                    </div>
+                    <div>
+                        
+                    </div>
+                    </div>
+                </div>
+            ))}
+            </div>
+        </div>
+
+        <div className="upcoming">
+            <h1>2024 Upcoming Movies</h1>
+            <div className="upcoming-movies">
+                <div className='upcoming-row'>
+            {data.upcoming.results.slice(0,5).map ((item: any, index: number) => (
+                <div className="movies">
+                    <img className="movie-image" src={`https://image.tmdb.org/t/p/w500/${item.backdrop_path}`} alt=""/>
+                    <div className="movie-overlay">
+                        <h3 className="movie-title">{item.title}</h3>
+                    <div className="hero-rating">
+                        <span>{item.release_date}</span>
+                    </div>
+                    </div>
+                </div>
+            ))}
+            </div>
+            <div className='upcoming-row'>
+            {data.upcoming.results.slice(5,10).map ((item: any, index: number) => (
+                <div className="movies">
+                    <img className="movie-image" src={`https://image.tmdb.org/t/p/w500/${item.backdrop_path}`} alt=""/>
+                    <div className="movie-overlay">
+                        <h3 className="movie-title">{item.title}</h3>
+                    <div className="hero-rating">
+                        <span>{item.release_date}</span>
+                    </div>
+                    </div>
+                </div>
+            ))}
+            </div>
+            </div>
+        </div>
+
+        <div className="movie-layout">
+            <h1>Now in theaters</h1>
+            <div className="row-movies">
+            {data.nowplaying.results.slice(1,6).map ((item: any, index: number) => (
+                <div className="movies">
                     <img className="movie-image" src={`https://image.tmdb.org/t/p/w500/${item.backdrop_path}`} alt=""/>
                     <div className="movie-overlay">
                         <h3 className="movie-title">{item.title}</h3>
